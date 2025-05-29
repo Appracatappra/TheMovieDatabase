@@ -13,15 +13,14 @@ open class TMDAccountLists: Codable, @unchecked Sendable {
     // MARK: - Static Functions
     /// Gets the collection of lists that the user has created on The Movie Database..
     /// - Parameters:
-    ///   - accountID: The user's Account ID.
     ///   - pageNumber: The page number to return. The default is 1.
     /// - Returns: Returns the collection of lists  or `nil` if unable to load.
-    public static func getRated(accountID:Int, pageNumber:Int = 1) async -> TMDAccountLists? {
+    public static func getRated(pageNumber:Int = 1) async -> TMDAccountLists? {
         
         // Trap all errors
         do {
             // Get data from The Movie Database.
-            let data = try await TMDEndpoint.getCollection(accountID: accountID, collection: .list, pageNumber: pageNumber)
+            let data = try await TMDEndpoint.getCollection(accountID: TMDEndpoint.accountID, collection: .list, pageNumber: pageNumber)
             
             // Attempt to read the returned data.
             let results = try JSONDecoder().decode(TMDAccountLists.self, from: data)

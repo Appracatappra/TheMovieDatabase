@@ -13,17 +13,16 @@ open class TMDAccountEpisodes: Codable, @unchecked Sendable {
     // MARK: - Static Functions
     /// Gets the collection of TV Show Episodes that the user has rated from the movie database.
     /// - Parameters:
-    ///   - accountID: The user's Account ID.
     ///   - pageNumber: The page number to return. The default is 1.
     ///   - sort: The sort order. The default is ascending.
     ///   - language: The langauge to return the results in. The default is "en-US".
     /// - Returns: Returns the rated list or `nil` if unable to load.
-    public static func getRated(accountID:Int, pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async -> TMDAccountEpisodes? {
+    public static func getRated(pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async -> TMDAccountEpisodes? {
         
         // Trap all errors
         do {
             // Get data from The Movie Database.
-            let data = try await TMDEndpoint.getCollection(accountID: accountID, collection: .rated, media: .tvEpisode, pageNumber: pageNumber, sort: sort, language: language)
+            let data = try await TMDEndpoint.getCollection(accountID: TMDEndpoint.accountID, collection: .rated, media: .tvEpisode, pageNumber: pageNumber, sort: sort, language: language)
             
             // Attempt to read the returned data.
             let results = try JSONDecoder().decode(TMDAccountEpisodes.self, from: data)

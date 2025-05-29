@@ -18,6 +18,12 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     /// Holds the currently logged in user account.
     nonisolated(unsafe) public static var account: TMDAccount = TMDAccount()
     
+    // MARK: - Static Computed Properties
+    /// Gets the ID of the currently logged in user account.
+    public static var accountID: Int {
+        return account.id
+    }
+    
     // MARK: - Static Functions
     /// Logs a user into The Movie Database using a username and password.
     /// - Parameters:

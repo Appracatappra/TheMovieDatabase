@@ -14,17 +14,16 @@ open class TMDAccountMovies: Codable, @unchecked Sendable {
     // MARK: - Static Functions
     /// Gets a user's collection of favorite movies from the movie database.
     /// - Parameters:
-    ///   - accountID: The user's Account ID.
     ///   - pageNumber: The page number to return. The default is 1.
     ///   - sort: The sort order. The default is ascending.
     ///   - language: The langauge to return the results in. The default is "en-US".
     /// - Returns: Returns the favorites list or `nil` if unable to load.
-    public static func getFavorites(accountID:Int, pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async -> TMDAccountMovies? {
+    public static func getFavorites(pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async -> TMDAccountMovies? {
         
         // Trap all errors
         do {
             // Get data from The Movie Database.
-            let data = try await TMDEndpoint.getCollection(accountID: accountID, collection: .favorites, media: .movies, pageNumber: pageNumber, sort: sort, language: language)
+            let data = try await TMDEndpoint.getCollection(accountID: TMDEndpoint.accountID, collection: .favorites, media: .movies, pageNumber: pageNumber, sort: sort, language: language)
             
             // Attempt to read the returned data.
             let results = try JSONDecoder().decode(TMDAccountMovies.self, from: data)
@@ -39,17 +38,16 @@ open class TMDAccountMovies: Codable, @unchecked Sendable {
     
     /// Gets the collection of movies that the user has rated from the movie database.
     /// - Parameters:
-    ///   - accountID: The user's Account ID.
     ///   - pageNumber: The page number to return. The default is 1.
     ///   - sort: The sort order. The default is ascending.
     ///   - language: The langauge to return the results in. The default is "en-US".
     /// - Returns: Returns the rated list or `nil` if unable to load.
-    public static func getRated(accountID:Int, pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async -> TMDAccountMovies? {
+    public static func getRated(pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async -> TMDAccountMovies? {
         
         // Trap all errors
         do {
             // Get data from The Movie Database.
-            let data = try await TMDEndpoint.getCollection(accountID: accountID, collection: .rated, media: .movies, pageNumber: pageNumber, sort: sort, language: language)
+            let data = try await TMDEndpoint.getCollection(accountID: TMDEndpoint.accountID, collection: .rated, media: .movies, pageNumber: pageNumber, sort: sort, language: language)
             
             // Attempt to read the returned data.
             let results = try JSONDecoder().decode(TMDAccountMovies.self, from: data)
@@ -64,17 +62,16 @@ open class TMDAccountMovies: Codable, @unchecked Sendable {
     
     /// Gets a user's collection of watchlist movies from the movie database.
     /// - Parameters:
-    ///   - accountID: The user's Account ID.
     ///   - pageNumber: The page number to return. The default is 1.
     ///   - sort: The sort order. The default is ascending.
     ///   - language: The langauge to return the results in. The default is "en-US".
     /// - Returns: Returns the favorites list or `nil` if unable to load.
-    public static func getWatchlist(accountID:Int, pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async -> TMDAccountMovies? {
+    public static func getWatchlist(pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async -> TMDAccountMovies? {
         
         // Trap all errors
         do {
             // Get data from The Movie Database.
-            let data = try await TMDEndpoint.getCollection(accountID: accountID, collection: .watchlist, media: .movies, pageNumber: pageNumber, sort: sort, language: language)
+            let data = try await TMDEndpoint.getCollection(accountID: TMDEndpoint.accountID, collection: .watchlist, media: .movies, pageNumber: pageNumber, sort: sort, language: language)
             
             // Attempt to read the returned data.
             let results = try JSONDecoder().decode(TMDAccountMovies.self, from: data)
@@ -89,16 +86,15 @@ open class TMDAccountMovies: Codable, @unchecked Sendable {
     
     /// Adds or removes a movie from the user's favorites collection.
     /// - Parameters:
-    ///   - accountID: The user's account ID.
     ///   - movieID: The movie's ID.
     ///   - isFavorite: If `true` add to favorites. If `false` remove from favorites.
     /// - Returns: Returns `true` is successful or `false` on failure.
-    public static func setFavorite(accountID:Int, movieID:Int, isFavorite:Bool = true) async -> Bool {
+    public static func setFavorite(movieID:Int, isFavorite:Bool = true) async -> Bool {
         
         // Trap all errors
         do {
             // Attempt to adjust the given collection.
-            let result = try await TMDEndpoint.adjustCollection(accountID: accountID, collection: .favorites, media: .movies, mediaID: movieID, inCollection: isFavorite)
+            let result = try await TMDEndpoint.adjustCollection(accountID: TMDEndpoint.accountID, collection: .favorites, media: .movies, mediaID: movieID, inCollection: isFavorite)
             
             // Return result
             return result
@@ -110,17 +106,16 @@ open class TMDAccountMovies: Codable, @unchecked Sendable {
     
     /// Adds or removes a movie from the user's favorites collection.
     /// - Parameters:
-    ///   - accountID: The user's account ID.
     ///   - sessionID: The active session ID.
     ///   - movieID: The movie's ID.
     ///   - inWatchlist: If `true` add to watchlist. If `false` remove from watchlist.
     /// - Returns: Returns `true` is successful or `false` on failure.
-    public static func setWatchlist(accountID:Int, movieID:Int, inWatchlist:Bool = true) async -> Bool {
+    public static func setWatchlist(movieID:Int, inWatchlist:Bool = true) async -> Bool {
         
         // Trap all errors
         do {
             // Attempt to adjust the given collection.
-            let result = try await TMDEndpoint.adjustCollection(accountID: accountID, collection: .watchlist, media: .movies, mediaID: movieID, inCollection: inWatchlist)
+            let result = try await TMDEndpoint.adjustCollection(accountID: TMDEndpoint.accountID, collection: .watchlist, media: .movies, mediaID: movieID, inCollection: inWatchlist)
             
             // Return result
             return result
