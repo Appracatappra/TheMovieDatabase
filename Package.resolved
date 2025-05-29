@@ -1,5 +1,5 @@
 {
-  "originHash" : "e8bf1d1271a4bc0a51f322114142e0b2a34c5d5b0eaf265f78d2b0bf1075abf3",
+  "originHash" : "ae7bcb5a6a6cadd97d11b801061992e3f1519d2ddf58e29f87a62474ae57ee73",
   "pins" : [
     {
       "identity" : "logmanager",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "ed7b6f091d9f261e75211c214a4ba0ea3ba7a84d",
         "version" : "2.0.4"
+      }
+    },
+    {
+      "identity" : "simpleserializer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Appracatappra/SimpleSerializer",
+      "state" : {
+        "revision" : "c68c9b9f44bf8d17b1cebd56fb478233b6583593",
+        "version" : "2.0.2"
       }
     },
     {

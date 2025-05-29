@@ -16,14 +16,15 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/Appracatappra/LogManager", .upToNextMajor(from: "2.0.0")),
-        .package(url: "https://github.com/Appracatappra/SwiftletUtilities", .upToNextMajor(from: "2.0.0"))
+        .package(url: "https://github.com/Appracatappra/SwiftletUtilities", .upToNextMajor(from: "2.0.0")),
+        .package(url: "https://github.com/Appracatappra/SimpleSerializer", .upToNextMajor(from: "2.0.0"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "TheMovieDatabase",
-            dependencies: ["LogManager", "SwiftletUtilities"],
+            dependencies: ["LogManager", "SwiftletUtilities", "SimpleSerializer"],
             resources: [.process("Resources")],
             swiftSettings: [
                 .swiftLanguageMode(.v6)
