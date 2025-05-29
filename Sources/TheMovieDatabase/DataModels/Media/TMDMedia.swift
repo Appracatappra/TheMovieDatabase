@@ -15,6 +15,9 @@ open class TMDMedia: Codable, @unchecked Sendable {
     /// The path to the backdrop image.
     public var backdropPath: String
     
+    /// A character attached to this media.
+    public var character: String?
+    
     /// A list of genre IDs.
     public var genreIDS: [Int]
     
@@ -59,6 +62,7 @@ open class TMDMedia: Codable, @unchecked Sendable {
     public enum CodingKeys: String, CodingKey {
         case adult
         case backdropPath = "backdrop_path"
+        case character
         case genreIDS = "genre_ids"
         case id
         case mediaType = "media_type"
@@ -77,6 +81,7 @@ open class TMDMedia: Codable, @unchecked Sendable {
     /// - Parameters:
     ///   - adult: If `true` is media contains adult content or themes. If `false` there is no adult content.
     ///   - backdropPath: The path to the backdrop image.
+    ///   - character: A character attached to this media.
     ///   - genreIDS: A list of genre IDs.
     ///   - id: The unique media ID.
     ///   - mediaType: The media type.
@@ -90,9 +95,10 @@ open class TMDMedia: Codable, @unchecked Sendable {
     ///   - video: If `true` there is video, else there is not.
     ///   - voteAverage: The vote average.
     ///   - voteCount: The vote count.
-    public init(adult: Bool, backdropPath: String, genreIDS: [Int], id: Int, mediaType: String, originalLanguage: String, originalTitle: String, overview: String, popularity: Double, posterPath: String, releaseDate: String, title: String, video: Bool, voteAverage: Double, voteCount: Int) {
+    public init(adult: Bool, backdropPath: String, character: String?, genreIDS: [Int], id: Int, mediaType: String, originalLanguage: String, originalTitle: String, overview: String, popularity: Double, posterPath: String, releaseDate: String, title: String, video: Bool, voteAverage: Double, voteCount: Int) {
         self.adult = adult
         self.backdropPath = backdropPath
+        self.character = character
         self.genreIDS = genreIDS
         self.id = id
         self.mediaType = mediaType

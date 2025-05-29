@@ -19,4 +19,7 @@ public enum TMDDataType: String, Codable {
     
     /// Represents configuration data.
     case configuration = "configuration"
+    
+    /// Represents credit data.
+    case credit = "credit"
 }
