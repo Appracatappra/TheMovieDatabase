@@ -8,7 +8,7 @@ import Foundation
 import SimpleSerializer
 
 /// Holds an instance of a certificataion query used in a The Movie Database query.
-open class TMDQueryCertifications: Codable, @unchecked Sendable {
+open class TMDQueryCertifications: Codable, SimpleSerializeable, @unchecked Sendable {
     
     // MARK: - Properties
     /// Holds a certification that the media must conform to.
@@ -29,7 +29,7 @@ open class TMDQueryCertifications: Codable, @unchecked Sendable {
     
     // MARK: - Computed Properties
     /// Returns the `TMDQueryCertifications` as a serialized string.
-    var serialized:String {
+    public var serialized:String {
         let serializer = Serializer(divider: TMDSerializerDivider.certifications)
             .append(certification)
             .append(certificationGreaterThan)
@@ -58,7 +58,7 @@ open class TMDQueryCertifications: Codable, @unchecked Sendable {
     
     /// Creates a new instance from a serialized string.
     /// - Parameter value: The serialized string representing the `TMDQueryCertifications`.
-    public init(from value:String) {
+    required public init(from value:String) {
         let deserializer = Deserializer(text: value, divider: TMDSerializerDivider.certifications)
         
         self.certification = deserializer.string()

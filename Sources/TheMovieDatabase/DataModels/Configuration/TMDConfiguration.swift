@@ -9,6 +9,7 @@
 // https://chisa.mintlify.app/api-reference/account/public-details
 
 import Foundation
+import LogManager
 
 /// Holds information about the general system configuration used throughout The Movie Database.
 open class TMDConfiguration: Codable, @unchecked Sendable {
@@ -36,6 +37,9 @@ open class TMDConfiguration: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDConfiguration", category: "getDetails", "An unexpected error occurred: \(error)")
+            
             // Return an empty configuration on error.
             return TMDConfiguration()
         }

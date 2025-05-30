@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds a media collection from The Movie Database.
 open class TMDMediaCollection: Codable, @unchecked Sendable {
@@ -29,6 +30,9 @@ open class TMDMediaCollection: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDMediaCollection", category: "getDetails", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

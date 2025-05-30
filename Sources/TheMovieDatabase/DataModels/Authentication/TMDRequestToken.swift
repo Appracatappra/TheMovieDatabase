@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Create an intermediate request token that can be used to validate a TMDB user login.
 open class TMDRequestToken: Codable, @unchecked Sendable {
@@ -32,6 +33,9 @@ open class TMDRequestToken: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDRequestToken", category: "getNewToken", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }
@@ -69,6 +73,9 @@ open class TMDRequestToken: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDRequestToken", category: "getLoginToken", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

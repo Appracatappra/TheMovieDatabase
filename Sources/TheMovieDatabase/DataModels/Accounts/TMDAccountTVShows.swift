@@ -31,6 +31,9 @@ open class TMDAccountTVShows: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDAccountTVShows", category: "getFavorites", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }
@@ -55,6 +58,9 @@ open class TMDAccountTVShows: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDAccountTVShows", category: "getRated", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }
@@ -79,6 +85,9 @@ open class TMDAccountTVShows: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDAccountTVShows", category: "getWatchlist", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }
@@ -99,6 +108,9 @@ open class TMDAccountTVShows: Codable, @unchecked Sendable {
             // Return result
             return result
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDAccountTVShows", category: "setFavorite", "An unexpected error occurred: \(error)")
+            
             // Return false on failure
             return false
         }
@@ -119,6 +131,9 @@ open class TMDAccountTVShows: Codable, @unchecked Sendable {
             // Return result
             return result
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDAccountTVShows", category: "setWatchlist", "An unexpected error occurred: \(error)")
+            
             // Return false on failure
             return false
         }

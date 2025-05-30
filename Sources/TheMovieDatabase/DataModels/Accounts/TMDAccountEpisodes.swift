@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds a list of TV Show Episodes related to a specific user.
 open class TMDAccountEpisodes: Codable, @unchecked Sendable {
@@ -30,6 +31,9 @@ open class TMDAccountEpisodes: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDAccountEpisodes", category: "getRated", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

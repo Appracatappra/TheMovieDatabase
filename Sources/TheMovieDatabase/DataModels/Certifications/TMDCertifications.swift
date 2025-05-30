@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds a collection of certifications from The Movie Database.
 open class TMDCertifications: Codable, @unchecked Sendable {
@@ -28,6 +29,9 @@ open class TMDCertifications: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDCertifications", category: "getCertifications", "An unexpected error occurred: \(error)")
+            
             // Return empty
             return TMDCertifications()
         }

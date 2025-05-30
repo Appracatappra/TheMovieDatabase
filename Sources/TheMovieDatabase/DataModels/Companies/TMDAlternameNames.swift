@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds a collection of company alternate names from The Movie Database.
 open class TMDAlternameNames: Codable, @unchecked Sendable {
@@ -28,6 +29,9 @@ open class TMDAlternameNames: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDAlternameNames", category: "getCompanyNames", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

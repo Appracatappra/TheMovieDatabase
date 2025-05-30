@@ -40,7 +40,7 @@ open class TMDTVEpisode: Codable, @unchecked Sendable {
     public var showID: Int
     
     /// Holds a path to the episode still.
-    public var stillPath: String
+    public var stillPath: String?
     
     /// Holds the average vote.
     public var voteAverage: Double
@@ -85,7 +85,7 @@ open class TMDTVEpisode: Codable, @unchecked Sendable {
     ///   - voteAverage: The average vote.
     ///   - voteCount: The average vote count.
     ///   - rating: The optional user rating.
-    public init(airDate: String, episodeNumber: Int, episodeType: String, id: Int, name: String, overview: String, productionCode: String, runtime: Int, seasonNumber: Int, showID: Int, stillPath: String, voteAverage: Double, voteCount: Int, rating: Int?) {
+    public init(airDate: String, episodeNumber: Int, episodeType: String, id: Int, name: String, overview: String, productionCode: String, runtime: Int, seasonNumber: Int, showID: Int, stillPath: String?, voteAverage: Double, voteCount: Int, rating: Int?) {
         
         // Initialize.
         self.airDate = airDate

@@ -9,4 +9,8 @@
 enum TMDSerializerDivider:String, Codable {
     case certifications = "~"
     case dates = "!"
+    case query = "@"
+    case vote = "#"
+    case with = "$"
+    case without = "%"
 }

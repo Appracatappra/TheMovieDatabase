@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds information about industry jobs used in The Movie Database.
 open class TMDJob: Codable, @unchecked Sendable {
@@ -26,6 +27,9 @@ open class TMDJob: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDJob", category: "getJobs", "An unexpected error occurred: \(error)")
+            
             // Return an empty configuration on error.
             return TMDJobs()
         }

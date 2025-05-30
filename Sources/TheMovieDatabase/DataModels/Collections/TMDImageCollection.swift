@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds an image collection read from The Movie Database.
 open class TMDImageCollection: Codable, @unchecked Sendable {
@@ -29,6 +30,9 @@ open class TMDImageCollection: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDImageCollection", category: "getImages", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

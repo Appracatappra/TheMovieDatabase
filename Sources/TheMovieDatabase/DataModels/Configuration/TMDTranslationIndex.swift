@@ -5,6 +5,7 @@
 //  Created by Kevin Mullins on 5/29/25.
 //
 import Foundation
+import LogManager
 
 /// Holds a translation index used in The Movie Database.
 open class TMDTranslationIndex: Codable, @unchecked Sendable {
@@ -25,6 +26,9 @@ open class TMDTranslationIndex: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDTranslationIndex", category: "getTranslationIndexes", "An unexpected error occurred: \(error)")
+            
             // Return an empty configuration on error.
             return TMDTranslationIndexes()
         }

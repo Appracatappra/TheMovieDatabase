@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds a collection of translations from The Movie Database.
 open class TMDTranslationCollection: Codable, @unchecked Sendable {
@@ -28,6 +29,9 @@ open class TMDTranslationCollection: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDTranslationCollection", category: "getTranslations", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

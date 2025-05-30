@@ -9,7 +9,7 @@ import Foundation
 import SimpleSerializer
 
 /// Holds an instance of a date range query used in a The Movie Database query.
-open class TMDQueryDates: Codable, @unchecked Sendable {
+open class TMDQueryDates: Codable, SimpleSerializeable, @unchecked Sendable {
     
     // MARK: - Properties
     /// The primary release year.
@@ -38,7 +38,7 @@ open class TMDQueryDates: Codable, @unchecked Sendable {
     
     // MARK: - Computed Properties
     /// Returns the `TMDQueryDates` as a serialized string.
-    var serialized:String {
+    public var serialized:String {
         let serializer = Serializer(divider: TMDSerializerDivider.dates)
             .append(primaryReleaseYear)
             .append(primaryReleaseDateGreaterThan)
@@ -72,7 +72,7 @@ open class TMDQueryDates: Codable, @unchecked Sendable {
     
     /// Creates a new instance from a serialized string.
     /// - Parameter value: The serialized string representing the `TMDQueryDates`.
-    public init(from value:String) {
+    required public init(from value:String) {
         let deserializer = Deserializer(text: value, divider: TMDSerializerDivider.dates)
         
         self.primaryReleaseYear = deserializer.string()

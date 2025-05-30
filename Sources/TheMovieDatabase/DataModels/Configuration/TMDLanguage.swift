@@ -5,6 +5,7 @@
 //  Created by Kevin Mullins on 5/29/25.
 //
 import Foundation
+import LogManager
 
 /// Holds information about a language code used in The Movie Database.
 open class TMDLanguage: Codable, @unchecked Sendable {
@@ -25,6 +26,9 @@ open class TMDLanguage: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDLanguage", category: "getLanguages", "An unexpected error occurred: \(error)")
+            
             // Return an empty configuration on error.
             return TMDLanguages()
         }

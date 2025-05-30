@@ -5,6 +5,7 @@
 //  Created by Kevin Mullins on 5/29/25.
 //
 import Foundation
+import LogManager
 
 /// Holds information about media credits read from The Movie Database.
 public class TMDCredits: Codable {
@@ -26,6 +27,9 @@ public class TMDCredits: Codable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDCredits", category: "getCredits", "An unexpected error occurred: \(error)")
+            
             // Return an empty on error.
             return nil
         }

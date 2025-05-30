@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds information about the count codes used in The Movie Database.
 open class TMDCountry: Codable, @unchecked Sendable {
@@ -26,6 +27,9 @@ open class TMDCountry: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDCountry", category: "getCountries", "An unexpected error occurred: \(error)")
+            
             // Return an empty configuration on error.
             return TMDCountries()
         }

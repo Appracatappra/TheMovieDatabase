@@ -36,6 +36,9 @@ open class TMDAccount: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDAccount", category: "getAccount", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }
@@ -67,6 +70,9 @@ open class TMDAccount: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDAccount", category: "getAccount", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds a collection of list that the user has created on The Movie Database.
 open class TMDAccountLists: Codable, @unchecked Sendable {
@@ -28,6 +29,9 @@ open class TMDAccountLists: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDAccountLists", category: "getRated", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

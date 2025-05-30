@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds the details of a company from The Movie Database.
 open class TMDCompany: Codable, @unchecked Sendable {
@@ -28,6 +29,9 @@ open class TMDCompany: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDCompany", category: "getCompany", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

@@ -42,3 +42,32 @@ let password = "YOUR_PASSWORD"
     
     #expect(TMDEndpoint.account.username == "KevKM")
 }
+
+@Test func testDiscoverMovies() async throws {
+    // Set api key
+    TMDConfiguration.apiKey = apiKey
+    
+    let success = await TMDEndpoint.loginGuest()
+    
+    guard success else {
+        Issue.record("Login failed")
+        return
+    }
+    
+    // Assemble query
+    let certifications = TMDQueryCertifications()
+    let dates = TMDQueryDates()
+    let votes = TMDQueryVotes()
+    let with = TMDQueryWith(genres:"14")
+    let without = TMDQueryWithout()
+    let query = TMDQuery(certifications: certifications, dates: dates, sortBy: .originalTitleAsc, votes: votes, with: with, without: without, year: "1992")
+    
+    let movies = await TMDMovies.discover(query: query)
+    
+    guard let movies else {
+        Issue.record("Query failed")
+        return
+    }
+    
+    #expect(movies.totalResults == 255)
+}

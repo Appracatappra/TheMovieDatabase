@@ -13,7 +13,7 @@ open class TMDMovie: Codable, @unchecked Sendable {
     public var adult: Bool
     
     /// The path to the main backdrop image.
-    public var backdropPath: String
+    public var backdropPath: String?
     
     /// A list of genre IDs that the film belongs in.
     public var genreIDS: [Int]
@@ -34,7 +34,7 @@ open class TMDMovie: Codable, @unchecked Sendable {
     public var popularity: Double
     
     /// The poster image path for the film.
-    public var posterPath: String
+    public var posterPath: String?
     
     /// The original release date for the film.
     public var releaseDate: String
@@ -90,7 +90,7 @@ open class TMDMovie: Codable, @unchecked Sendable {
     ///   - voteAverage: The average vote for the film on The Movie Database.
     ///   - voteCount: The number of votes for the film on The Movie Database.
     ///   - rating: The optional user rating for this movie.
-    public init(adult: Bool, backdropPath: String, genreIDS: [Int], id: Int, originalLanguage: String, originalTitle: String, overview: String, popularity: Double, posterPath: String, releaseDate: String, title: String, video: Bool, voteAverage: Double, voteCount: Int, rating: Int?) {
+    public init(adult: Bool, backdropPath: String?, genreIDS: [Int], id: Int, originalLanguage: String, originalTitle: String, overview: String, popularity: Double, posterPath: String?, releaseDate: String, title: String, video: Bool, voteAverage: Double, voteCount: Int, rating: Int?) {
         self.adult = adult
         self.backdropPath = backdropPath
         self.genreIDS = genreIDS

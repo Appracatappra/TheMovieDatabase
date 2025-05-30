@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds a collection of changes from The Movie Database.
 open class TMDChanges: Codable, @unchecked Sendable {
@@ -28,6 +29,9 @@ open class TMDChanges: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDChanges", category: "getChanges", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

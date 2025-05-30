@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 open class TMDSession: Codable, @unchecked Sendable {
     
@@ -32,6 +33,9 @@ open class TMDSession: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDSession", category: "getNewSession", "An unexpected error occurred: \(error)")
+            
             // Return empty token
             return nil
         }

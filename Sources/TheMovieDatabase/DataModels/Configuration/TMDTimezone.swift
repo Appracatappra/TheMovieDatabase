@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LogManager
 
 /// Holds information about a timezone from The Movie Database.
 open class TMDTimezone: Codable, @unchecked Sendable {
@@ -26,6 +27,9 @@ open class TMDTimezone: Codable, @unchecked Sendable {
             // Return results
             return results
         } catch {
+            // Log error
+            Debug.error(subsystem: "TMDTimezone", category: "getTimezones", "An unexpected error occurred: \(error)")
+            
             // Return an empty configuration on error.
             return TMDTimezones()
         }
