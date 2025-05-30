@@ -1,5 +1,5 @@
 //
-//  TMDQuery.swift
+//  TMDMovieQuery.swift
 //  TheMovieDatabase
 //
 //  Created by Kevin Mullins on 5/30/25.
@@ -9,7 +9,7 @@ import Foundation
 import SimpleSerializer
 
 /// Holds an instance of a certificataion query used in a The Movie Database query.
-open class TMDQuery: Codable, SimpleSerializeable, @unchecked Sendable {
+open class TMDMovieQuery: Codable, SimpleSerializeable, @unchecked Sendable {
     
     // MARK: - Properties
     /// Holds a collection of certifications.
@@ -50,7 +50,7 @@ open class TMDQuery: Codable, SimpleSerializeable, @unchecked Sendable {
     public var year: String = ""
     
     // MARK: - Computed Properties
-    /// Returns the `TMDQuery` as a serialized string.
+    /// Returns the `TMDMovieQuery` as a serialized string.
     public var serialized: String {
         let serializer = Serializer(divider: TMDSerializerDivider.query)
             .append(certifications)
@@ -102,7 +102,7 @@ open class TMDQuery: Codable, SimpleSerializeable, @unchecked Sendable {
     }
     
     /// Creates a new instance from a serialized string.
-    /// - Parameter value: The serialized string representing the `TMDQuery`.
+    /// - Parameter value: The serialized string representing the `TMDMovieQuery`.
     public required init(from value: String) {
         let deserializer = Deserializer(text: value, divider: TMDSerializerDivider.query)
         

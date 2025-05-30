@@ -60,7 +60,7 @@ let password = "YOUR_PASSWORD"
     let votes = TMDQueryVotes()
     let with = TMDQueryWith(genres:"14")
     let without = TMDQueryWithout()
-    let query = TMDQuery(certifications: certifications, dates: dates, sortBy: .originalTitleAsc, votes: votes, with: with, without: without, year: "1992")
+    let query = TMDMovieQuery(certifications: certifications, dates: dates, sortBy: .originalTitleAsc, votes: votes, with: with, without: without, year: "1992")
     
     let movies = await TMDMovies.discover(query: query)
     

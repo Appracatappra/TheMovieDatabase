@@ -12,7 +12,7 @@ import LogManager
 open class TMDMovies: Codable, @unchecked Sendable {
     
     // MARK: - Static Functions
-    public static func discover(query:TMDQuery, pageNumber:Int = 1) async -> TMDMovies? {
+    public static func discover(query:TMDMovieQuery, pageNumber:Int = 1) async -> TMDMovies? {
         
         // Configure url for REST api call
         let endpoint = URLBuilder("https://api.themoviedb.org/3/discover/movie")

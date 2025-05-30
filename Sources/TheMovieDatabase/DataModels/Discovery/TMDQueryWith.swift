@@ -58,6 +58,16 @@ open class TMDQueryWith: Codable, SimpleSerializeable, @unchecked Sendable {
     /// - Remark: Can be a comma (AND) or pipe (OR) separated query.
     public var watchProviders:String = ""
     
+    /// Including netwroks.
+    /// - Remark: Can be a comma (AND) or pipe (OR) separated query.
+    public var networks:String = ""
+    
+    /// Include tv show status.
+    public var status: TMDMediaStatus = .any
+    
+    /// Include tv show type.
+    public var showType: TMDShowType = .any
+    
     // MARK: - Computed Properties
     /// Returns the `TMDQueryWith` as a serialized string.
     public var serialized: String {
@@ -75,6 +85,9 @@ open class TMDQueryWith: Codable, SimpleSerializeable, @unchecked Sendable {
             .append(runtimeLessThan)
             .append(monitization)
             .append(watchProviders)
+            .append(networks)
+            .append(status)
+            .append(showType)
         
         return serializer.value
     }
@@ -95,7 +108,10 @@ open class TMDQueryWith: Codable, SimpleSerializeable, @unchecked Sendable {
     ///   - runtimeLessThan: Include runtime less than.
     ///   - monitization: Include monitization type.
     ///   - watchProviders: Including watch providers.
-    public init(cast:String = "", companies:String = "", crew:String = "", genres:String = "", keywords:String = "", originCountry:String = "", originalLanguage:String = "", people:String = "", releaseType:TMDReleaseType = .any, runtimeGreaterThan:String = "", runtimeLessThan:String = "", monitization:TMDMonitizationType = .any, watchProviders:String = "") {
+    ///   - networks: Include networks.
+    ///   - status: Include tv show status.
+    ///   - showType: Include tv show type.
+    public init(cast:String = "", companies:String = "", crew:String = "", genres:String = "", keywords:String = "", originCountry:String = "", originalLanguage:String = "", people:String = "", releaseType:TMDReleaseType = .any, runtimeGreaterThan:String = "", runtimeLessThan:String = "", monitization:TMDMonitizationType = .any, watchProviders:String = "", networks:String = "", status: TMDMediaStatus = .any, showType: TMDShowType = .any) {
         
         self.cast = cast
         self.companies = companies
@@ -110,6 +126,9 @@ open class TMDQueryWith: Codable, SimpleSerializeable, @unchecked Sendable {
         self.runtimeLessThan = runtimeLessThan
         self.monitization = monitization
         self.watchProviders = watchProviders
+        self.networks = networks
+        self.status = status
+        self.showType = showType
     }
     
     /// Creates a new instance from a serialized string.
@@ -130,6 +149,9 @@ open class TMDQueryWith: Codable, SimpleSerializeable, @unchecked Sendable {
         self.runtimeLessThan = deserializer.string()
         self.monitization = deserializer.stringEnum()
         self.watchProviders = deserializer.string()
+        self.networks = deserializer.string()
+        self.status = deserializer.stringEnum()
+        self.showType = deserializer.stringEnum()
     }
     
 }
