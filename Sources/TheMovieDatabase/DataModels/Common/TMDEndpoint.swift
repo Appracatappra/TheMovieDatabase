@@ -178,6 +178,53 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
         return data
     }
     
+    
+    /// Gets a guest session collection from The Movie Database.
+    /// - Parameters:
+    ///   - collection: The collection to return data from.
+    ///   - media: The type of media to return in the collection.
+    ///   - pageNumber: The page number to return data for. The defaut is 1.
+    ///   - sort: The sort direction. The default is Ascending.
+    ///   - language: The language to return data in. The default is "en-US".
+    /// - Returns: Returns a `Data` collection if successful.
+    public static func getGuestCollection(collection:TMDCollectionType, media:TMDMediaType, pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async throws -> Data {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/guest_session/")
+            .addPathParameter(parameter: sessionID)
+            .addPathParameter(parameter: collection.rawValue)
+            .addPathParameter(parameter: media.rawValue)
+            .addParameter(name: "page", value: pageNumber)
+            .addParameter(name: "sort_by", value: sort.rawValue)
+            .addParameter(name: "language", value: language)
+     
+        // Ensure we have a good url
+        guard let url = endpoint.url else {
+            // No, throw an error.
+            throw TMDError.invalidURL(url: endpoint.urlString)
+        }
+        
+        // Get data from The Movie Database.
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "getCollection", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Return the results
+        return data
+    }
+    
     /// Gets a collection of data from the user's account on The Movie Database.
     /// - Parameters:
     ///   - accountID: The account ID.
@@ -260,20 +307,72 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
         return data
     }
     
+    /// Gets a collection of the given type from The Movie Database.
+    /// - Parameters:
+    ///   - collection: The collection type.
+    ///   - collectionID: The collection ID.
+    ///   - media: The type of media to return. The default is any.
+    ///   - includeAdult: If `true` include adult content, else exclude it.
+    ///   - page: The page number to return.
+    ///   - language: The language code. The defaut is "en-US".
+    /// - Returns: Returns a `Data` collection if successful.
+    public static func getCollection(collection:TMDCollectionType, collectionID:Int, media:TMDMediaType = .any, includeAdult:Bool = false, page: Int = 1, language:String = "en-US") async throws -> Data {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/\(collection.rawValue)/\(collectionID)")
+            .addPathParameter(parameter: media.rawValue)
+            .addParameter(name: "session_id", value: sessionID)
+            .addParameter(name: "include_adult", value: includeAdult)
+            .addParameter(name: "language", value: language)
+            .addParameter(name: "page", value: page)
+     
+        // Ensure we have a good url
+        guard let url = endpoint.url else {
+            // No, throw an error.
+            throw TMDError.invalidURL(url: endpoint.urlString)
+        }
+        
+        // Get data from The Movie Database.
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "getCollection", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Return the results
+        return data
+    }
+    
     /// Gets a list of data from The Movie Database.
     /// - Parameters:
     ///   - dataType: The type of data to return.
     ///   - media: The media type to return.
     ///   - collection: The collection type to return.
+    ///   - includeSession: If `true` include a session ID, else don't include.
     /// - Returns: Returns a `Data` collection if successful.
-    public static func getList(dataType:TMDDataType, media:TMDMediaType, collection:TMDCollectionType) async throws -> Data {
+    public static func getList(dataType:TMDDataType, media:TMDMediaType, collection:TMDCollectionType, includeSession:Bool = true) async throws -> Data {
         
         // Configure url for REST api call
         let endpoint = URLBuilder("https://api.themoviedb.org/3")
             .addPathParameter(parameter: dataType.rawValue)
             .addPathParameter(parameter: media.rawValue)
             .addPathParameter(parameter: collection.rawValue)
-            .addParameter(name: "session_id", value: sessionID)
+        
+        // Includes a session ID?
+        if includeSession{
+            // Yes, add session to the parameters.
+            endpoint.addParameter(name: "session_id", value: sessionID)
+        }
      
         // Ensure we have a good url
         guard let url = endpoint.url else {
@@ -307,13 +406,19 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     ///   - dataType: The data type.
     ///   - dataID: The unique ID of the data.
     ///   - media: The type of media to return. The default is any.
+    ///   - includeSession: If `true` use the currecgt session ID, else ndo not use it.
     /// - Returns: Returns a `Data` collection if successful.
-    public static func getDetails(dataType:TMDDataType, dataID:Int, media:TMDMediaType = .any) async throws -> Data {
+    public static func getDetails(dataType:TMDDataType, dataID:Int, media:TMDMediaType = .any, includeSession: Bool = true) async throws -> Data {
         
         // Configure url for REST api call
         let endpoint = URLBuilder("https://api.themoviedb.org/3/\(dataType.rawValue)/\(dataID)")
             .addPathParameter(parameter: media.rawValue)
-            .addParameter(name: "session_id", value: sessionID)
+        
+        // Include the session ID?
+        if includeSession {
+            // Yes, use as a parameter.
+            endpoint.addParameter(name: "session_id", value: sessionID)
+        }
      
         // Ensure we have a good url
         guard let url = endpoint.url else {

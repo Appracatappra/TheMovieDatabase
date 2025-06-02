@@ -21,7 +21,7 @@ public enum TMDMediaType: String, Codable {
     case tvShow = "tv"
     
     /// The media is a television show episode.
-    case tvEpisode = "tv/episodes"
+    case tvEpisodes = "tv/episodes"
     
     /// The media is a person in the entertainment industry.
     case person = "person"

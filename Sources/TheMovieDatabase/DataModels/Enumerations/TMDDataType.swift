@@ -22,4 +22,10 @@ public enum TMDDataType: String, Codable {
     
     /// Represents credit data.
     case credit = "credit"
+    
+    /// Represents genre data.
+    case genre = "genre"
+    
+    /// Represents keyword data.
+    case keyword = "keyword"
 }

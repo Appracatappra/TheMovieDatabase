@@ -25,4 +25,7 @@ public enum TMDCollectionType: String, Codable {
     
     /// A collection.
     case collection = "collection"
+    
+    /// A keyword based collection.
+    case keyword = "keyword"
 }
