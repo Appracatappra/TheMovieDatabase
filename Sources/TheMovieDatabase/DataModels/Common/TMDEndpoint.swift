@@ -395,7 +395,52 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
         }
         
         // Testing
-        // Debug.info(subsystem: "TMDEndpoint", category: "getCollection", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        // Debug.info(subsystem: "TMDEndpoint", category: "getList", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Return the results
+        return data
+    }
+    
+    /// Gets the given list of media.
+    /// - Parameters:
+    ///   - media: The media type.
+    ///   - collection: The collection type to return.
+    ///   - page: The page number to return. The default is 1.
+    ///   - language: The language to return. The default is "en-US".
+    ///   - region: The region to return. The default is "US".
+    /// - Returns: Returns a `Data` collection if successful.
+    public static func getList(media:TMDMediaType, collection:TMDCollectionType, page:Int = 1, language:String = "en-US", region:String = "US") async throws -> Data {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3")
+            .addPathParameter(parameter: media.rawValue)
+            .addPathParameter(parameter: collection.rawValue)
+            .addParameter(name: "page", value: page)
+            .addParameter(name: "language", value: language)
+            .addParameter(name: "region", value: region)
+     
+        // Ensure we have a good url
+        guard let url = endpoint.url else {
+            // No, throw an error.
+            throw TMDError.invalidURL(url: endpoint.urlString)
+        }
+        
+        // Get data from The Movie Database.
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "getList", String(data: data, encoding: .utf8) ?? "No Data Returned")
         
         // Return the results
         return data
@@ -498,6 +543,45 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
         let endpoint = URLBuilder("https://api.themoviedb.org/3/\(dataType.rawValue)")
             .addPathParameter(parameter: media.rawValue)
             .addParameter(name: "session_id", value: sessionID)
+     
+        // Ensure we have a good url
+        guard let url = endpoint.url else {
+            // No, throw an error.
+            throw TMDError.invalidURL(url: endpoint.urlString)
+        }
+        
+        // Get data from The Movie Database.
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "getCollection", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Return the results
+        return data
+    }
+    
+    /// Gets the details for the given media type and ID.
+    /// - Parameters:
+    ///   - media: The type of media to get details for.
+    ///   - mediaID: The ID of the media to get details for.
+    ///   - language: The language to get the details in. The default is "en-US".
+    /// - Returns: Returns a `Data` collection if successful.
+    public static func getMediaDetails(media:TMDMediaType, mediaID:Int, language:String = "en-US") async throws -> Data {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/\(media.rawValue)/\(mediaID)")
+            .addParameter(name: "language", value: language)
      
         // Ensure we have a good url
         guard let url = endpoint.url else {

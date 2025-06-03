@@ -49,10 +49,10 @@ open class TMDMediaCollection: Codable, @unchecked Sendable {
     public var name: String
     
     /// The collection overview.
-    public var overview: String
+    public var overview: String?
     
     /// The media items in the collection.
-    public var parts: [TMDMedia]
+    public var parts: [TMDMedia]?
     
     /// The collection poster path.
     public var posterPath: String
@@ -74,7 +74,7 @@ open class TMDMediaCollection: Codable, @unchecked Sendable {
     ///   - overview: The collection overview.
     ///   - parts: The media items in the collection.
     ///   - posterPath: The collection poster path.
-    public init(backdropPath: String, id: Int, name: String, overview: String, parts: [TMDMedia], posterPath: String) {
+    public init(backdropPath: String, id: Int, name: String, overview: String?, parts: [TMDMedia]?, posterPath: String) {
         self.backdropPath = backdropPath
         self.id = id
         self.name = name

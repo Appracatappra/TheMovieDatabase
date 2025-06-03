@@ -124,6 +124,114 @@ open class TMDMovies: Codable, @unchecked Sendable {
         }
     }
     
+    /// Gets a list of movies currently playing in the theater.
+    /// - Parameters:
+    ///   - page: The page number to return. The default is 1.
+    ///   - language: The language to return. The default is "en-US".
+    ///   - region: The region to return. The default is "US".
+    /// - Returns: Returns the list of movies or `nil` if unable to load.
+    public static func getNowPlaying(page:Int = 1, language:String = "en-US", region:String = "US") async -> TMDMovies? {
+        
+        // Trap all errors
+        do {
+            // Get data from The Movie Database.
+            let data = try await TMDEndpoint.getList(media: .movies, collection: .nowPlaying, page: page, language: language, region: region)
+            
+            // Attempt to read the returned data.
+            let results = try JSONDecoder().decode(TMDMovies.self, from: data)
+            
+            // Return results
+            return results
+        } catch {
+            // Log error
+            Debug.error(subsystem: "TMDMovies", category: "getNowPlaying", "An unexpected error occurred: \(error)")
+            
+            // Return empty token
+            return nil
+        }
+    }
+    
+    /// Gets a list of popular movies.
+    /// - Parameters:
+    ///   - page: The page number to return. The default is 1.
+    ///   - language: The language to return. The default is "en-US".
+    ///   - region: The region to return. The default is "US".
+    /// - Returns: Returns the list of movies or `nil` if unable to load.
+    public static func getPopular(page:Int = 1, language:String = "en-US", region:String = "US") async -> TMDMovies? {
+        
+        // Trap all errors
+        do {
+            // Get data from The Movie Database.
+            let data = try await TMDEndpoint.getList(media: .movies, collection: .popular, page: page, language: language, region: region)
+            
+            // Attempt to read the returned data.
+            let results = try JSONDecoder().decode(TMDMovies.self, from: data)
+            
+            // Return results
+            return results
+        } catch {
+            // Log error
+            Debug.error(subsystem: "TMDMovies", category: "getPopular", "An unexpected error occurred: \(error)")
+            
+            // Return empty token
+            return nil
+        }
+    }
+    
+    /// Gets a list of top rated movies.
+    /// - Parameters:
+    ///   - page: The page number to return. The default is 1.
+    ///   - language: The language to return. The default is "en-US".
+    ///   - region: The region to return. The default is "US".
+    /// - Returns: Returns the list of movies or `nil` if unable to load.
+    public static func getTopRated(page:Int = 1, language:String = "en-US", region:String = "US") async -> TMDMovies? {
+        
+        // Trap all errors
+        do {
+            // Get data from The Movie Database.
+            let data = try await TMDEndpoint.getList(media: .movies, collection: .topRated, page: page, language: language, region: region)
+            
+            // Attempt to read the returned data.
+            let results = try JSONDecoder().decode(TMDMovies.self, from: data)
+            
+            // Return results
+            return results
+        } catch {
+            // Log error
+            Debug.error(subsystem: "TMDMovies", category: "getTopRated", "An unexpected error occurred: \(error)")
+            
+            // Return empty token
+            return nil
+        }
+    }
+    
+    /// Gets a list of upcoming movies.
+    /// - Parameters:
+    ///   - page: The page number to return. The default is 1.
+    ///   - language: The language to return. The default is "en-US".
+    ///   - region: The region to return. The default is "US".
+    /// - Returns: Returns the list of movies or `nil` if unable to load.
+    public static func getUpcoming(page:Int = 1, language:String = "en-US", region:String = "US") async -> TMDMovies? {
+        
+        // Trap all errors
+        do {
+            // Get data from The Movie Database.
+            let data = try await TMDEndpoint.getList(media: .movies, collection: .upcoming, page: page, language: language, region: region)
+            
+            // Attempt to read the returned data.
+            let results = try JSONDecoder().decode(TMDMovies.self, from: data)
+            
+            // Return results
+            return results
+        } catch {
+            // Log error
+            Debug.error(subsystem: "TMDMovies", category: "getUpcoming", "An unexpected error occurred: \(error)")
+            
+            // Return empty token
+            return nil
+        }
+    }
+    
     /// Gets a list of movies matching a given keyword ID.
     /// - Parameters:
     ///   - keywordID: The ID of the keyword to return.
@@ -282,6 +390,9 @@ open class TMDMovies: Codable, @unchecked Sendable {
     }
     
     // MARK: - Properties
+    /// Holds a range of dates that the movies fall in.
+    public var dates: TMDDateRange?
+    
     /// The current page number.
     public var page: Int
     
@@ -297,6 +408,7 @@ open class TMDMovies: Codable, @unchecked Sendable {
     // MARK: - Coding Keys
     /// The coding keys for the class.
     public enum CodingKeys: String, CodingKey {
+        case dates
         case page, results
         case totalPages = "total_pages"
         case totalResults = "total_results"
@@ -309,7 +421,9 @@ open class TMDMovies: Codable, @unchecked Sendable {
     ///   - results: The list of matching Movies.
     ///   - totalPages: The total number of pages available.
     ///   - totalResults: The total number of films in all pages.
-    public init(page: Int, results: [TMDMovie], totalPages: Int, totalResults: Int) {
+    ///   - dates: Holds a range of dates that the movies fall in.
+    public init(dates: TMDDateRange?, page: Int, results: [TMDMovie], totalPages: Int, totalResults: Int) {
+        self.dates = dates
         self.page = page
         self.results = results
         self.totalPages = totalPages

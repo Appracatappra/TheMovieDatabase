@@ -28,4 +28,16 @@ public enum TMDCollectionType: String, Codable {
     
     /// A keyword based collection.
     case keyword = "keyword"
+    
+    /// A now playing collection.
+    case nowPlaying = "now_playing"
+    
+    /// A collection of popular media.
+    case popular = "popular"
+    
+    /// A collection of top rated media.
+    case topRated = "top_rated"
+    
+    /// A collection of upcoming media.
+    case upcoming = "upcoming"
 }
