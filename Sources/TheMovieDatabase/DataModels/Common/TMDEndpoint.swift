@@ -401,6 +401,46 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
         return data
     }
     
+    /// Gets the details and contents of a user list.
+    /// - Parameters:
+    ///   - listID: The ID of the list to get the contents of.
+    ///   - page: The page to load. The default is 1.
+    ///   - language: The language to get the items in. The default is "en-US".
+    /// - Returns: Returns a `Data` collection if successful.
+    public static func getListContents(listID:Int, page:Int = 1, language:String = "en-US") async throws -> Data {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)")
+            .addParameter(name: "page", value: page)
+            .addParameter(name: "language", value: language)
+     
+        // Ensure we have a good url
+        guard let url = endpoint.url else {
+            // No, throw an error.
+            throw TMDError.invalidURL(url: endpoint.urlString)
+        }
+        
+        // Get data from The Movie Database.
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "getListContents", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Return the results
+        return data
+    }
+    
     /// Gets the given item details from The Movie Database.
     /// - Parameters:
     ///   - dataType: The data type.
@@ -542,6 +582,334 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
         
         // Testing
         // Debug.info(subsystem: "TMDEndpoint", category: "adjustCollection", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Return success
+        return true
+    }
+    
+    /// Adds the give media to a list.
+    /// - Parameters:
+    ///   - listID: The ID of the list to add to.
+    ///   - media: The type of media to add.
+    ///   - mediaID: The ID of the media to add.
+    /// - Returns: Returns `true` if the list was adjusted, else returns `false` on failure.
+    public static func addToList(listID:Int, media:TMDMediaType, mediaID:Int) async throws -> Bool {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)/add_item")
+            .addParameter(name: "session_id", value: sessionID)
+        
+        // Ensure we have a good url
+        guard let url = endpoint.url else {return false}
+        
+        // Assemble post body.
+        let body = HTTPBodyBuilder("""
+            {
+              "media_id": <id>,
+              "media_type": "<type>",
+              "list_id": <listID>
+            }
+            """)
+            .addParameter(name: "id", Value: mediaID)
+            .addParameter(name: "type", Value: media.rawValue)
+            .addParameter(name: "listID", Value: listID)
+        
+        // Create and configure the request.
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 10
+        request.allHTTPHeaderFields = [
+          "accept": "application/json",
+          "content-type": "application/json"
+        ]
+        request.httpBody = body.data
+
+        // Post the data to THe Movie Database.
+        let (_, response) = try await URLSession.shared.data(for: request)
+    
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "addToList", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Return success
+        return true
+    }
+    
+    /// Removes a media item from a list.
+    /// - Parameters:
+    ///   - listID: The list ID to remove the media from.
+    ///   - media: The type of media.
+    ///   - mediaID: The media ID.
+    /// - Returns: Returns `true` if the list was adjusted, else returns `false` on failure.
+    public static func removeFromList(listID:Int, media:TMDMediaType, mediaID:Int) async throws -> Bool {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)/remove_item")
+            .addParameter(name: "session_id", value: sessionID)
+        
+        // Ensure we have a good url
+        guard let url = endpoint.url else {return false}
+        
+        // Assemble post body.
+        let body = HTTPBodyBuilder("""
+            {
+              "items": [
+                {
+                  "media_type": "<type>",
+                  "media_id": <id>
+                }
+              ]
+            }
+            """)
+            .addParameter(name: "id", Value: mediaID)
+            .addParameter(name: "type", Value: media.rawValue)
+        
+        // Create and configure the request.
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 10
+        request.allHTTPHeaderFields = [
+          "accept": "application/json",
+          "content-type": "application/json"
+        ]
+        request.httpBody = body.data
+
+        // Post the data to THe Movie Database.
+        let (_, response) = try await URLSession.shared.data(for: request)
+    
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "addToList", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Return success
+        return true
+    }
+    
+    /// Checks to see if a media item is in a list.
+    /// - Parameters:
+    ///   - listID: The ID of the list to check.
+    ///   - media: The type of media to check for.
+    ///   - mediaID: The ID of the media item to check for.
+    ///   - language: The language to check in.
+    /// - Returns: Returns `true` if the item is in the list or `false` if the item is not or if an invalid type is checked.
+    public static func isItemInList(listID:Int, media:TMDMediaType, mediaID:Int, language: String = "en-US") async throws -> Bool {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)/item_status")
+            .addParameter(name: "language", value: language)
+        
+        // Take action based on the media type.
+        switch(media) {
+        case .movie:
+            // Check for a movie.
+            endpoint.addParameter(name: "movie_id", value: mediaID)
+            break
+            
+        case .tvShow:
+            // Check for a tv show.
+            endpoint.addParameter(name: "tv_id", value: mediaID)
+            break
+            
+        default:
+            // Return false on invalid types.
+            return false
+        }
+     
+        // Ensure we have a good url
+        guard let url = endpoint.url else {
+            // No, throw an error.
+            throw TMDError.invalidURL(url: endpoint.urlString)
+        }
+        
+        // Get data from The Movie Database.
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "isItemInList", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Attempt to read the returned data.
+        let results = try JSONDecoder().decode(TMDPresent.self, from: data)
+        
+        // Return the results
+        return results.itemPresent
+    }
+    
+    /// Clears all items from the given list.
+    /// - Parameters:
+    ///   - listID: The ID of the list to clear items from.
+    ///   - confirm: If `true` confirm the deletion.
+    /// - Returns: Returns `true` if successful or `false` on error.
+    public static func clearList(listID:Int, confirm:Bool = false) async throws -> Bool {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)/clear")
+            .addParameter(name: "session_id", value: sessionID)
+            .addParameter(name: "confirm", value: confirm)
+        
+        // Ensure we have a good url
+        guard let url = endpoint.url else {return false}
+        
+        // Assemble post body.
+        let body = HTTPBodyBuilder("")
+        
+        // Create and configure the request.
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 10
+        request.allHTTPHeaderFields = [
+          "accept": "application/json",
+          "content-type": "application/json"
+        ]
+        //request.httpBody = body.data
+
+        // Post the data to THe Movie Database.
+        let (_, response) = try await URLSession.shared.data(for: request)
+    
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "clearList", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Return success
+        return true
+    }
+    
+    /// Creates a new user list.
+    /// - Parameters:
+    ///   - name: The name of the list to create.
+    ///   - description: The new list's description.
+    /// - Returns: Returns a `Data` collection if successful.
+    public static func createList(name:String, description:String) async throws -> Data? {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list")
+            .addParameter(name: "session_id", value: sessionID)
+        
+        // Ensure we have a good url
+        guard let url = endpoint.url else {return nil}
+        
+        // Assemble post body.
+        let body = HTTPBodyBuilder("""
+            {
+              "name": <name>,
+              "description": "<description>",
+            }
+            """)
+            .addParameter(name: "name", Value: name)
+            .addParameter(name: "description", Value: description)
+        
+        // Create and configure the request.
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 10
+        request.allHTTPHeaderFields = [
+          "accept": "application/json",
+          "content-type": "application/json"
+        ]
+        request.httpBody = body.data
+
+        // Post the data to THe Movie Database.
+        let (data, response) = try await URLSession.shared.data(for: request)
+    
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "createList", String(data: data, encoding: .utf8) ?? "No Data Returned")
+        
+        // Return success
+        return data
+    }
+    
+    /// Deletes the given user list.
+    /// - Parameter listID: The ID of the list to delete.
+    /// - Returns: Returns `true` if successful or `false` on error.
+    public static func deleteList(listID:Int) async throws -> Bool {
+        
+        // Configure url for REST api call
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)")
+            .addParameter(name: "session_id", value: sessionID)
+        
+        // Ensure we have a good url
+        guard let url = endpoint.url else {return false}
+        
+        // Assemble post body.
+        let body = HTTPBodyBuilder("")
+        
+        // Create and configure the request.
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.timeoutInterval = 10
+        request.allHTTPHeaderFields = [
+          "accept": "application/json",
+          "content-type": "application/json"
+        ]
+        //request.httpBody = body.data
+
+        // Post the data to THe Movie Database.
+        let (_, response) = try await URLSession.shared.data(for: request)
+    
+        // Can we get the status code?
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            // No, throw an error.
+            throw TMDError.invalidStatusCode(statusCode: -1)
+        }
+        
+        // Was the action successful?
+        guard (200...299).contains(statusCode) else {
+            throw TMDError.invalidStatusCode(statusCode: statusCode)
+        }
+        
+        // Testing
+        // Debug.info(subsystem: "TMDEndpoint", category: "deleteList", String(data: data, encoding: .utf8) ?? "No Data Returned")
         
         // Return success
         return true
