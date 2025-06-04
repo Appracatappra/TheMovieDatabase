@@ -654,19 +654,12 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
             }
             """)
             .addParameter(name: "id", value: mediaID)
-            .addParameter(name: "type", value: media.rawValue)
-            .addParameter(name: "collection", value: collection.rawValue)
+            .addParameter(name: "type", value: media)
+            .addParameter(name: "collection", value: collection)
             .addParameter(name: "inCollection", value: inCollection)
         
         // Create and configure the request.
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.timeoutInterval = 10
-        request.allHTTPHeaderFields = [
-          "accept": "application/json",
-          "content-type": "application/json"
-        ]
-        request.httpBody = body.data
+        let request = URLRequest.build(url: url, data: body.data)
 
         // Post the data to THe Movie Database.
         let (_, response) = try await URLSession.shared.data(for: request)
@@ -715,20 +708,13 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
             }
             """)
             .addParameter(name: "id", value: mediaID)
-            .addParameter(name: "type", value: media.rawValue)
+            .addParameter(name: "type", value: media)
             .addParameter(name: "listID", value: listID)
         
         // Create and configure the request.
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.timeoutInterval = 10
-        request.allHTTPHeaderFields = [
-          "accept": "application/json",
-          "content-type": "application/json"
-        ]
-        request.httpBody = body.data
+        let request = URLRequest.build(url: url, data: body.data)
 
-        // Post the data to THe Movie Database.
+        // Post the data to The Movie Database.
         let (_, response) = try await URLSession.shared.data(for: request)
     
         // Can we get the status code?
@@ -778,17 +764,10 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
             }
             """)
             .addParameter(name: "id", value: mediaID)
-            .addParameter(name: "type", value: media.rawValue)
+            .addParameter(name: "type", value: media)
         
         // Create and configure the request.
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.timeoutInterval = 10
-        request.allHTTPHeaderFields = [
-          "accept": "application/json",
-          "content-type": "application/json"
-        ]
-        request.httpBody = body.data
+        let request = URLRequest.build(url: url, data: body.data)
 
         // Post the data to THe Movie Database.
         let (_, response) = try await URLSession.shared.data(for: request)
@@ -890,18 +869,8 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
         // Ensure we have a good url
         guard let url = endpoint.url else {return false}
         
-        // Assemble post body.
-        let body = HTTPBodyBuilder("")
-        
         // Create and configure the request.
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.timeoutInterval = 10
-        request.allHTTPHeaderFields = [
-          "accept": "application/json",
-          "content-type": "application/json"
-        ]
-        //request.httpBody = body.data
+        let request = URLRequest.build(url: url)
 
         // Post the data to THe Movie Database.
         let (_, response) = try await URLSession.shared.data(for: request)
@@ -949,14 +918,7 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
             .addParameter(name: "description", value: description)
         
         // Create and configure the request.
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.timeoutInterval = 10
-        request.allHTTPHeaderFields = [
-          "accept": "application/json",
-          "content-type": "application/json"
-        ]
-        request.httpBody = body.data
+        let request = URLRequest.build(url: url, data: body.data)
 
         // Post the data to THe Movie Database.
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -992,18 +954,8 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
         // Ensure we have a good url
         guard let url = endpoint.url else {return false}
         
-        // Assemble post body.
-        let body = HTTPBodyBuilder("")
-        
         // Create and configure the request.
-        var request = URLRequest(url: url)
-        request.httpMethod = "DELETE"
-        request.timeoutInterval = 10
-        request.allHTTPHeaderFields = [
-          "accept": "application/json",
-          "content-type": "application/json"
-        ]
-        //request.httpBody = body.data
+        let request = URLRequest.build(url: url, method: .delete)
 
         // Post the data to THe Movie Database.
         let (_, response) = try await URLSession.shared.data(for: request)

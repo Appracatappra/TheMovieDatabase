@@ -65,14 +65,7 @@ open class TMDSession: Codable, @unchecked Sendable {
                 .addParameter(name: "id", value: sessionID)
             
             // Create and configure the request.
-            var request = URLRequest(url: url)
-            request.httpMethod = "DELETE"
-            request.timeoutInterval = 10
-            request.allHTTPHeaderFields = [
-              "accept": "application/json",
-              "content-type": "application/json"
-            ]
-            request.httpBody = body.data
+            let request = URLRequest.build(url: url, data: body.data, method: .delete)
 
             // Post the data to The Movie Database.
             let (_, response) = try await URLSession.shared.data(for: request)
