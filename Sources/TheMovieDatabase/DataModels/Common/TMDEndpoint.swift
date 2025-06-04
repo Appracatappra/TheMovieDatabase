@@ -7,6 +7,7 @@
 
 import Foundation
 import LogManager
+import UrlUtilities
 
 /// Low-leve backend API calls for Accounts in The Movie Database.
 open class TMDEndpoint: Codable, @unchecked Sendable {
@@ -145,10 +146,13 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func getCollection(accountID:Int, collection:TMDCollectionType, media:TMDMediaType, pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async throws -> Data {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/account/\(accountID)/\(collection.rawValue)/\(media.rawValue)")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/account")
+            .addPathParameter(accountID)
+            .addPathParameter(collection)
+            .addPathParameter(media)
             .addParameter(name: "session_id", value: sessionID)
             .addParameter(name: "page", value: pageNumber)
-            .addParameter(name: "sort_by", value: sort.rawValue)
+            .addParameter(name: "sort_by", value: sort)
             .addParameter(name: "language", value: language)
      
         // Ensure we have a good url
@@ -190,12 +194,12 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func getGuestCollection(collection:TMDCollectionType, media:TMDMediaType, pageNumber:Int = 1, sort:TMDSortOrder = .Ascending, language:String = "en-US") async throws -> Data {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/guest_session/")
-            .addPathParameter(parameter: sessionID)
-            .addPathParameter(parameter: collection.rawValue)
-            .addPathParameter(parameter: media.rawValue)
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/guest_session")
+            .addPathParameter(sessionID)
+            .addPathParameter(collection)
+            .addPathParameter(media)
             .addParameter(name: "page", value: pageNumber)
-            .addParameter(name: "sort_by", value: sort.rawValue)
+            .addParameter(name: "sort_by", value: sort)
             .addParameter(name: "language", value: language)
      
         // Ensure we have a good url
@@ -234,7 +238,9 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func getCollection(accountID:Int, collection:TMDCollectionType, pageNumber:Int = 1) async throws -> Data {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/account/\(accountID)/\(collection.rawValue)")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/account")
+            .addPathParameter(accountID)
+            .addPathParameter(collection)
             .addParameter(name: "session_id", value: sessionID)
             .addParameter(name: "page", value: pageNumber)
      
@@ -275,8 +281,10 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func getCollection(collection:TMDCollectionType, collectionID:Int, media:TMDMediaType = .any, language:String = "en-US") async throws -> Data {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/\(collection.rawValue)/\(collectionID)")
-            .addPathParameter(parameter: media.rawValue)
+        let endpoint = URLBuilder("https://api.themoviedb.org/3")
+            .addPathParameter(collection)
+            .addPathParameter(collectionID)
+            .addPathParameter(media)
             .addParameter(name: "session_id", value: sessionID)
             .addParameter(name: "language", value: language)
      
@@ -319,8 +327,10 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func getCollection(collection:TMDCollectionType, collectionID:Int, media:TMDMediaType = .any, includeAdult:Bool = false, page: Int = 1, language:String = "en-US") async throws -> Data {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/\(collection.rawValue)/\(collectionID)")
-            .addPathParameter(parameter: media.rawValue)
+        let endpoint = URLBuilder("https://api.themoviedb.org/3")
+            .addPathParameter(collection)
+            .addPathParameter(collectionID)
+            .addPathParameter(media)
             .addParameter(name: "session_id", value: sessionID)
             .addParameter(name: "include_adult", value: includeAdult)
             .addParameter(name: "language", value: language)
@@ -364,9 +374,9 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
         
         // Configure url for REST api call
         let endpoint = URLBuilder("https://api.themoviedb.org/3")
-            .addPathParameter(parameter: dataType.rawValue)
-            .addPathParameter(parameter: media.rawValue)
-            .addPathParameter(parameter: collection.rawValue)
+            .addPathParameter(dataType)
+            .addPathParameter(media)
+            .addPathParameter(collection)
         
         // Includes a session ID?
         if includeSession{
@@ -413,8 +423,8 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
         
         // Configure url for REST api call
         let endpoint = URLBuilder("https://api.themoviedb.org/3")
-            .addPathParameter(parameter: media.rawValue)
-            .addPathParameter(parameter: collection.rawValue)
+            .addPathParameter(media)
+            .addPathParameter(collection)
             .addParameter(name: "page", value: page)
             .addParameter(name: "language", value: language)
             .addParameter(name: "region", value: region)
@@ -455,7 +465,8 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func getListContents(listID:Int, page:Int = 1, language:String = "en-US") async throws -> Data {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list")
+            .addPathParameter(listID)
             .addParameter(name: "page", value: page)
             .addParameter(name: "language", value: language)
      
@@ -496,8 +507,10 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func getDetails(dataType:TMDDataType, dataID:Int, media:TMDMediaType = .any, includeSession: Bool = true) async throws -> Data {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/\(dataType.rawValue)/\(dataID)")
-            .addPathParameter(parameter: media.rawValue)
+        let endpoint = URLBuilder("https://api.themoviedb.org/3")
+            .addPathParameter(dataType)
+            .addPathParameter(dataID)
+            .addPathParameter(media)
         
         // Include the session ID?
         if includeSession {
@@ -540,8 +553,9 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func getDetails(dataType:TMDDataType, media:TMDMediaType = .any) async throws -> Data {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/\(dataType.rawValue)")
-            .addPathParameter(parameter: media.rawValue)
+        let endpoint = URLBuilder("https://api.themoviedb.org/3")
+            .addPathParameter(dataType)
+            .addPathParameter(media)
             .addParameter(name: "session_id", value: sessionID)
      
         // Ensure we have a good url
@@ -580,7 +594,9 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func getMediaDetails(media:TMDMediaType, mediaID:Int, language:String = "en-US") async throws -> Data {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/\(media.rawValue)/\(mediaID)")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3")
+            .addPathParameter(media)
+            .addPathParameter(mediaID)
             .addParameter(name: "language", value: language)
      
         // Ensure we have a good url
@@ -621,7 +637,9 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func adjustCollection(accountID:Int, collection:TMDCollectionType, media:TMDMediaType, mediaID:Int, inCollection:Bool) async throws -> Bool {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/account/\(accountID)/\(collection.rawValue)")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/account")
+            .addPathParameter(accountID)
+            .addPathParameter(collection)
             .addParameter(name: "session_id", value: sessionID)
         
         // Ensure we have a good url
@@ -635,10 +653,10 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
               "<collection>": <inCollection>
             }
             """)
-            .addParameter(name: "id", Value: mediaID)
-            .addParameter(name: "type", Value: media.rawValue)
-            .addParameter(name: "collection", Value: collection.rawValue)
-            .addParameter(name: "inCollection", Value: inCollection)
+            .addParameter(name: "id", value: mediaID)
+            .addParameter(name: "type", value: media.rawValue)
+            .addParameter(name: "collection", value: collection.rawValue)
+            .addParameter(name: "inCollection", value: inCollection)
         
         // Create and configure the request.
         var request = URLRequest(url: url)
@@ -680,7 +698,9 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func addToList(listID:Int, media:TMDMediaType, mediaID:Int) async throws -> Bool {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)/add_item")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list")
+            .addPathParameter(listID)
+            .addPathParameter("add_item")
             .addParameter(name: "session_id", value: sessionID)
         
         // Ensure we have a good url
@@ -694,9 +714,9 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
               "list_id": <listID>
             }
             """)
-            .addParameter(name: "id", Value: mediaID)
-            .addParameter(name: "type", Value: media.rawValue)
-            .addParameter(name: "listID", Value: listID)
+            .addParameter(name: "id", value: mediaID)
+            .addParameter(name: "type", value: media.rawValue)
+            .addParameter(name: "listID", value: listID)
         
         // Create and configure the request.
         var request = URLRequest(url: url)
@@ -738,7 +758,9 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func removeFromList(listID:Int, media:TMDMediaType, mediaID:Int) async throws -> Bool {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)/remove_item")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list")
+            .addPathParameter(listID)
+            .addPathParameter("remove_item")
             .addParameter(name: "session_id", value: sessionID)
         
         // Ensure we have a good url
@@ -755,8 +777,8 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
               ]
             }
             """)
-            .addParameter(name: "id", Value: mediaID)
-            .addParameter(name: "type", Value: media.rawValue)
+            .addParameter(name: "id", value: mediaID)
+            .addParameter(name: "type", value: media.rawValue)
         
         // Create and configure the request.
         var request = URLRequest(url: url)
@@ -799,7 +821,9 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func isItemInList(listID:Int, media:TMDMediaType, mediaID:Int, language: String = "en-US") async throws -> Bool {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)/item_status")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list")
+            .addPathParameter(listID)
+            .addPathParameter("item_status")
             .addParameter(name: "language", value: language)
         
         // Take action based on the media type.
@@ -857,7 +881,9 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func clearList(listID:Int, confirm:Bool = false) async throws -> Bool {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)/clear")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list")
+            .addPathParameter(listID)
+            .addPathParameter("clear")
             .addParameter(name: "session_id", value: sessionID)
             .addParameter(name: "confirm", value: confirm)
         
@@ -919,8 +945,8 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
               "description": "<description>",
             }
             """)
-            .addParameter(name: "name", Value: name)
-            .addParameter(name: "description", Value: description)
+            .addParameter(name: "name", value: name)
+            .addParameter(name: "description", value: description)
         
         // Create and configure the request.
         var request = URLRequest(url: url)
@@ -959,7 +985,8 @@ open class TMDEndpoint: Codable, @unchecked Sendable {
     public static func deleteList(listID:Int) async throws -> Bool {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/list/\(listID)")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/list")
+            .addPathParameter(listID)
             .addParameter(name: "session_id", value: sessionID)
         
         // Ensure we have a good url

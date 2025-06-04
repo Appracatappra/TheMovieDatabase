@@ -8,7 +8,7 @@ let password = "YOUR_PASSWORD"
 
 @Test func urlBuilder() async throws {
     // Set api key
-    TMDConfiguration.apiKey = apiKey
+    TMDConfiguration.setApiKey(apiKey)
     
     let endpoint = URLBuilder("https://login")
         .addParameter(name: "username", value: "jdoe")
@@ -22,7 +22,7 @@ let password = "YOUR_PASSWORD"
 
 @Test func testGuestLogin() async throws {
     // Set api key
-    TMDConfiguration.apiKey = apiKey
+    TMDConfiguration.setApiKey(apiKey)
     
     let success = await TMDEndpoint.loginGuest()
     
@@ -31,7 +31,7 @@ let password = "YOUR_PASSWORD"
 
 @Test func testUserLogin() async throws {
     // Set api key
-    TMDConfiguration.apiKey = apiKey
+    TMDConfiguration.setApiKey(apiKey)
     
     let success = await TMDEndpoint.loginUser(username: username, password: password)
     
@@ -45,7 +45,7 @@ let password = "YOUR_PASSWORD"
 
 @Test func testDiscoverMovies() async throws {
     // Set api key
-    TMDConfiguration.apiKey = apiKey
+    TMDConfiguration.setApiKey(apiKey)
     
     let success = await TMDEndpoint.loginGuest()
     

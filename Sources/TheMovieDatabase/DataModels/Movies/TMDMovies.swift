@@ -7,6 +7,7 @@
 
 import Foundation
 import LogManager
+import UrlUtilities
 
 /// Holds a collection of the user's movies from The Movie Database.
 open class TMDMovies: Codable, @unchecked Sendable {
@@ -20,6 +21,7 @@ open class TMDMovies: Codable, @unchecked Sendable {
     public static func discover(query:TMDMovieQuery, pageNumber:Int = 1) async -> TMDMovies? {
         
         // Configure url for REST api call
+        // NOTE: I had to break these into sections to get it to compile correctly.
         let endpoint = URLBuilder("https://api.themoviedb.org/3/discover/movie")
             .addParameter(name: "page", value: pageNumber)
             .addParameter(name: "certification", value: query.certifications.certification)
@@ -27,21 +29,24 @@ open class TMDMovies: Codable, @unchecked Sendable {
             .addParameter(name: "certification.lte", value: query.certifications.certificationLessThan)
             .addParameter(name: "certification_country", value: query.certifications.certificationCountry)
             .addParameter(name: "include_adult", value: query.includeAdult)
-            .addParameter(name: "include_video", value: query.includeVideo)
+            
+        endpoint.addParameter(name: "include_video", value: query.includeVideo)
             .addParameter(name: "language", value: query.language)
             .addParameter(name: "primary_release_year", value: query.dates.primaryReleaseYear)
             .addParameter(name: "primary_release_date.gte", value: query.dates.primaryReleaseDateGreaterThan)
             .addParameter(name: "primary_release_date.lte", value: query.dates.primaryReleaseDateLessThan)
-            .addParameter(name: "region", value: query.region)
+            
+        endpoint.addParameter(name: "region", value: query.region)
             .addParameter(name: "release_date.gte", value: query.dates.releaseDateGreaterThan)
             .addParameter(name: "release_date.lte", value: query.dates.releaseDateLessThan)
-            .addParameter(name: "sort_by", value: query.sortBy.rawValue)
+            .addParameter(name: "sort_by", value: query.sortBy)
             .addParameter(name: "vote_average.gte", value: query.votes.voteAverageGreaterThan)
             .addParameter(name: "vote_average.lte", value: query.votes.voteAverageLessThan)
             .addParameter(name: "vote_count.gte", value: query.votes.voteCountGreaterThan)
             .addParameter(name: "vote_count.lte", value: query.votes.voteCountLessThan)
             .addParameter(name: "watch_region", value: query.watchRegion)
-            .addParameter(name: "with_cast", value: query.with.cast)
+            
+        endpoint.addParameter(name: "with_cast", value: query.with.cast)
             .addParameter(name: "with_companies", value: query.with.companies)
             .addParameter(name: "with_crew", value: query.with.crew)
             .addParameter(name: "with_genres", value: query.with.genres)
@@ -49,10 +54,11 @@ open class TMDMovies: Codable, @unchecked Sendable {
             .addParameter(name: "with_origin_country", value: query.with.originCountry)
             .addParameter(name: "with_original_language", value: query.with.originalLanguage)
             .addParameter(name: "with_people", value: query.with.people)
-            .addParameter(name: "with_release_type", value: query.with.releaseType.rawValue)
-            .addParameter(name: "with_runtime.gte", value: query.with.runtimeGreaterThan)
+            .addParameter(name: "with_release_type", value: query.with.releaseType)
+            
+        endpoint.addParameter(name: "with_runtime.gte", value: query.with.runtimeGreaterThan)
             .addParameter(name: "with_runtime.lte", value: query.with.runtimeLessThan)
-            .addParameter(name: "with_watch_monetization_types", value: query.with.monitization.rawValue)
+            .addParameter(name: "with_watch_monetization_types", value: query.with.monitization)
             .addParameter(name: "with_watch_providers", value: query.with.watchProviders)
             .addParameter(name: "without_companies", value: query.without.companies)
             .addParameter(name: "without_genres", value: query.without.genres)

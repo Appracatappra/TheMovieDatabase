@@ -7,6 +7,7 @@
 
 import Foundation
 import LogManager
+import UrlUtilities
 
 /**
  Find media in The Movie Database by external ID's. The find method makes it easy to search for objects in our database by an external identifier. This method will search all objects (movies, TV shows and people) and return the results in a single response.
@@ -35,8 +36,8 @@ open class TMDFind: Codable, @unchecked Sendable {
         
         // Configure url for REST api call
         let endpoint = URLBuilder("https://api.themoviedb.org/3/find")
-            .addPathParameter(parameter: externalID)
-            .addParameter(name: "external_source", value: provider.rawValue)
+            .addPathParameter(externalID)
+            .addParameter(name: "external_source", value: provider)
             .addParameter(name: "language", value: language)
      
         // Ensure we have a good url

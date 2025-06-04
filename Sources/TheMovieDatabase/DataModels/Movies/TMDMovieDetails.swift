@@ -16,7 +16,7 @@ open class TMDMovieDetails: Codable, @unchecked Sendable {
     ///   - movieID: The ID of the movie to get details for.
     ///   - language: The language to get the details in. The default is "en-US".
     /// - Returns: Returns the movie details if successful, else returns `nil`.
-    public static func getUpcoming(movieID:Int, language:String = "en-US") async -> TMDMovieDetails? {
+    public static func getDetails(movieID:Int, language:String = "en-US") async -> TMDMovieDetails? {
         
         // Trap all errors
         do {
@@ -30,7 +30,7 @@ open class TMDMovieDetails: Codable, @unchecked Sendable {
             return results
         } catch {
             // Log error
-            Debug.error(subsystem: "TMDMovieDetails", category: "getUpcoming", "An unexpected error occurred: \(error)")
+            Debug.error(subsystem: "TMDMovieDetails", category: "getDetails", "An unexpected error occurred: \(error)")
             
             // Return empty token
             return nil

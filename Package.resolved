@@ -1,5 +1,5 @@
 {
-  "originHash" : "ae7bcb5a6a6cadd97d11b801061992e3f1519d2ddf58e29f87a62474ae57ee73",
+  "originHash" : "860657b55defcc8ca64ee6504072ea808f5cd1ebbd7d5decb3cd8ea11abb16c0",
   "pins" : [
     {
       "identity" : "logmanager",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "27095cbeb844a50cec83764ca627418745fc5a6f",
         "version" : "2.0.6"
+      }
+    },
+    {
+      "identity" : "urlutilities",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Appracatappra/UrlUtilities",
+      "state" : {
+        "revision" : "5ea64305785ca9156c7c51ef32abb346db1afae3",
+        "version" : "1.0.0"
       }
     }
   ],

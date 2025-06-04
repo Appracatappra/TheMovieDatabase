@@ -7,6 +7,7 @@
 
 import Foundation
 import LogManager
+import UrlUtilities
 
 open class TMDAccount: Codable, @unchecked Sendable {
     
@@ -17,7 +18,8 @@ open class TMDAccount: Codable, @unchecked Sendable {
     public static func getAccount(id:Int) async -> TMDAccount? {
         
         // Configure url for REST api call
-        let endpoint = URLBuilder("https://api.themoviedb.org/3/account/\(id)")
+        let endpoint = URLBuilder("https://api.themoviedb.org/3/account")
+            .addPathParameter(id)
      
         // Ensure we have a good url
         guard let url = endpoint.url else {return nil}

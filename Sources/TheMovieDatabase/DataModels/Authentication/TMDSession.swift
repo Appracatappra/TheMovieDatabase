@@ -7,6 +7,7 @@
 
 import Foundation
 import LogManager
+import UrlUtilities
 
 open class TMDSession: Codable, @unchecked Sendable {
     
@@ -61,7 +62,7 @@ open class TMDSession: Codable, @unchecked Sendable {
                   "session_id": <id>
                 }
                 """)
-                .addParameter(name: "id", Value: sessionID)
+                .addParameter(name: "id", value: sessionID)
             
             // Create and configure the request.
             var request = URLRequest(url: url)

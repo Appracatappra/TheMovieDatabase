@@ -7,6 +7,7 @@
 
 import Foundation
 import LogManager
+import UrlUtilities
 
 /// Holds a collection of the user's movies from The Movie Database.
 open class TMDTVShows: Codable, @unchecked Sendable {
@@ -20,6 +21,7 @@ open class TMDTVShows: Codable, @unchecked Sendable {
     public static func discover(query:TMDTvQuery, pageNumber:Int = 1) async -> TMDTVShows? {
         
         // Configure url for REST api call
+        // NOTE: I had to break this into sections to compile
         let endpoint = URLBuilder("https://api.themoviedb.org/3/discover/movie")
             .addParameter(name: "page", value: pageNumber)
             .addParameter(name: "air_date.gte", value: query.airDates.airDateGreaterThan)
@@ -31,7 +33,8 @@ open class TMDTVShows: Codable, @unchecked Sendable {
             .addParameter(name: "include_adult", value: query.includeAdult)
             .addParameter(name: "language", value: query.language)
             .addParameter(name: "screened_theatrically", value: query.screenedTheatrically)
-            .addParameter(name: "sort_by", value: query.sortBy.rawValue)
+        
+        endpoint.addParameter(name: "sort_by", value: query.sortBy)
             .addParameter(name: "timezone", value: query.timezone)
             .addParameter(name: "vote_average.gte", value: query.votes.voteAverageGreaterThan)
             .addParameter(name: "vote_average.lte", value: query.votes.voteAverageLessThan)
@@ -39,17 +42,19 @@ open class TMDTVShows: Codable, @unchecked Sendable {
             .addParameter(name: "vote_count.lte", value: query.votes.voteCountLessThan)
             .addParameter(name: "watch_region", value: query.watchRegion)
             .addParameter(name: "with_companies", value: query.with.companies)
-            .addParameter(name: "with_genres", value: query.with.genres)
+            
+        endpoint.addParameter(name: "with_genres", value: query.with.genres)
             .addParameter(name: "with_keywords", value: query.with.keywords)
             .addParameter(name: "with_networks", value: query.with.networks)
             .addParameter(name: "with_origin_country", value: query.with.originCountry)
             .addParameter(name: "with_original_language", value: query.with.originalLanguage)
             .addParameter(name: "with_runtime.gte", value: query.with.runtimeGreaterThan)
             .addParameter(name: "with_runtime.lte", value: query.with.runtimeLessThan)
-            .addParameter(name: "with_status", value: query.with.status.rawValue)
-            .addParameter(name: "with_watch_monetization_types", value: query.with.monitization.rawValue)
+            
+        endpoint.addParameter(name: "with_status", value: query.with.status)
+            .addParameter(name: "with_watch_monetization_types", value: query.with.monitization)
             .addParameter(name: "with_watch_providers", value: query.with.watchProviders)
-            .addParameter(name: "with_type", value: query.with.showType.rawValue)
+            .addParameter(name: "with_type", value: query.with.showType)
             .addParameter(name: "without_companies", value: query.without.companies)
             .addParameter(name: "without_genres", value: query.without.genres)
             .addParameter(name: "without_keywords", value: query.without.keywords)

@@ -7,6 +7,7 @@
 
 import Foundation
 import LogManager
+import UrlUtilities
 
 /// Create an intermediate request token that can be used to validate a TMDB user login.
 open class TMDRequestToken: Codable, @unchecked Sendable {

@@ -10,18 +10,30 @@
 
 import Foundation
 import LogManager
+import UrlUtilities
 
 /// Holds information about the general system configuration used throughout The Movie Database.
 open class TMDConfiguration: Codable, @unchecked Sendable {
     
     // MARK: - Static Properties
-    /// Holds an instance of the developer's API Key used throughout the app.
-    nonisolated(unsafe) public static var apiKey: String = ""
+    /// Gets the developer's API Key used throughout the app.
+    nonisolated(unsafe) public private(set) static var apiKey: String = ""
     
     /// A common shared instance of The Movie Database configurations.
     nonisolated(unsafe) public static var shared: TMDConfiguration = TMDConfiguration()
     
     // MARK: - Static Functions
+    /// Sets the API Key used for all The Movie Database endpoint calls.
+    /// - Parameter apiKey: The API Key to set.
+    public static func setApiKey(_ apiKey: String) {
+        
+        // Add a default API key to all URLBuilder calls
+        URLBuilder.addDefaultParameter(name: "api_key", value: apiKey)
+        
+        // Save the API Key
+        TMDConfiguration.apiKey = apiKey
+    }
+    
     /// Gets the current configuration from The Movie Database.
     /// - Returns: Returns the configuration or an empty configuration if unable to load.
     public static func getDetails() async -> TMDConfiguration {
