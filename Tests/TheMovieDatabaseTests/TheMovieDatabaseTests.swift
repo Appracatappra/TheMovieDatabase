@@ -1,4 +1,5 @@
 import Testing
+import UrlUtilities
 @testable import TheMovieDatabase
 
 // Set parameters
